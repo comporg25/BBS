@@ -1,0 +1,112 @@
+What is computer and what isn't.
+
+# Terminal (not a computer).
+
+Device that originally printed on paper. It has standard output (STDOUT) and standard input (STDIN).
+
+STDOUT is on monitor, STDIN is the keyboard.
+
+What does it show? it shows numbers encoded as ASCII.
+
+ASCII table.
+
+LF, CR - line feed, carriage return.
+
+what is video memory.
+
+How to work in shell?
+
+`cat` command outputs a content of the file to SDOUT.
+
+Actually `cat` comes from `concatenate` so you can write `cat a.txt b.txt c.txt` and all three files will be concatenated and output to the STDOUT.
+
+You want to redirect STDOUT to other file? Then there's a `>` operator in shell.
+
+`cat a.txt b.txt c.txt > all.txt`
+
+will write content of all three files in to all.txt file.
+
+If you want to add, not overwrite, you use `>>` operator.
+
+Login to our server: the.hell.am.
+
+Call program `fortune`. It says some things.
+
+Now redirect output of fortune to other program:
+
+```
+fortune | cowsay
+```
+
+you have redirected STDOUT of fortune to STDIN of program cowsay.
+
+Or: `ls` vs `ls | more` when we redirect STDOUT of `ls` to `more`.
+
+# Computer
+
+Has a bus, CPU, RAM, and Storage: according to Von Neumann design.
+There are other designs.
+
+Our computers are Von Neumann based.
+
+Zoom in to CPU: It has different units. It can crunch numbers: ALU - is its Arithmetic Logic Unit, Instruction Decoder, Fetcher, Execution Unit, FPU (Floating point unit), MMU(Memory management), VPU(Vector Processing Unit), Load/Store Unit, etc.
+
+More on those later.
+
+Zoom out: Memory, Storage.
+
+Program layout in the memory. According to Von Neumann architecture programs are stored on long term storag: Hard drive, SSD, etc, and in order to be executed are loaded to the memory.
+
+To the same memory area, where program will also store its data.
+
+This is the fundamental philosophical concept: Programs and data are in the same memory in Von Neumann's architecture.
+
+Therefore in theory, one can "treat code as data, and treat data as code".
+
+So one can write self modifying code: Your program has access to variables, stack, etc? It can also change itself. It consists of numbers in TEXT segment.
+
+So if program changes some numbers, in TEXT segment, it changes itself. Then you can JMP (Goto) to that changed memory area and run the changed code. This is called self modifying code.
+
+This technique was often used in old games.
+
+However, today, modern operating systems together with CPU's forbid doing so, because that is typical behaviour of viruses: to change the code (TEXT) segment.
+
+## Program layout
+
+We have TEXT segment for compiled code, then we have BSS, RODATA, DATA segments.
+
+We also have STACK and HEAP segments.
+
+STACK grows from up to down. Processor has instructions `push` and `pop` to put or pop something to or out of the stack.
+
+The stack in Linux has fixed size: 8mbs. It can't grow more. If you need a bigger or smaller stack you change a system configuration.
+
+You may want a smaller stack, if let's say you want to open hunderds of thousands of threads. Each thread allocates its own stack.
+
+And therefore 8MB per thread may be too much for even a powerful machine. Then you limit the stack size, and you are able to run many threads.
+
+More on stack or threads later.
+
+## Virtual memory
+
+That memory layout is for one program. Many old computers were able only to load and run one program.
+
+Today's computers (CPUs and operating systems) support running several programs.
+But then it may happen, that one program will damage memory of other program. Why? One example is C language: it has pointer arithmetics, and it's not hard to reach other program's memory, if OS and CPU allow you.
+
+Therefore contemporary operating systems use Virtual address spaces. Each program gets loaded to its own adress space.
+
+And if we zoom out we can see lots of them.
+
+Each address space has virtual addresses - those aren't real hardware memory addresses. Real hardware memory addresses are mapped by CPU and OS to virtual addresses of the programs. When you get a pointer or a variable address, it's not a real hardware address. That  is a virtual address.
+
+The mapping is done by pages. Usually in Linux page size is 4k. In very contemporary Android: 16k. So each program is mapped to real hardware memory by small pieces. One piece of one program can be from one area of real memory, other - from completely different area, but your program will see those as continious space.
+This is done, so that "animals in the zoo will not eat each other". Because we can't trust the programs we run. If we could trust the programs we run, then it would be much faster, without having to deal with software and hardware that has to map virtual addresses to real addresses.
+
+More on that later.
+
+# CPU
+
+Let's zoom in to CPU now.
+
+to be continued
